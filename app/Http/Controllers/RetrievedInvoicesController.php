@@ -8,8 +8,11 @@ class RetrievedInvoicesController extends Controller{
     public function retrievedInvoices(Request $request){
         if($request->isMethod("post")){
             try{
-              $retrievedInvoices=DB::select("SELECT * FROM created_invoices WHERE senderEmail=:senderEmail",[":senderEmail"=>$request->input("senderEmail")]);
-              return response()->json($retrievedInvoices);
+           //   $retrievedInvoices=DB::select("SELECT * FROM created_invoices WHERE senderEmail=:senderEmail",[":senderEmail"=>$request->input("senderEmail")]);
+           $retrievedInvoices=DB::table("created_invoices")
+                               ->where("senderEmail",$request->input("senderEmail"))
+                               ->get();
+           return response()->json($retrievedInvoices);
             }catch(QueryException $e){
                 return response()->json("Detected error:",$e->getMessage());
             }

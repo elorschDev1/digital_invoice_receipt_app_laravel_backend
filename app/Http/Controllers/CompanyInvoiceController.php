@@ -17,13 +17,23 @@ class CompanyInvoiceController extends Controller{
                 ->where('paymentStatus', 'Unpaid')
                 ->where('dueDate', '<', now())
                 ->update(['paymentStatus' => 'Overdue']);
+
+
+            //Get top client by invoice value
+            $topClientByRevenue=DB::table("created_invoices")
+                ->select("grandTotal","receiverName")
+                ->where("senderEmail",$email)
+                ->get();
             
             // Get company details
             $companyDetails = DB::table('registered_users')
                 ->where('business_email', $email)
                 ->get();
             
-            return response()->json($companyDetails);
+            return response()->json([
+                "companyDetails"=>$companyDetails,
+                "topClient"=>$topClientByRevenue
+            ]);
             
         } catch(QueryException $e){
             return response()->json(["error" => $e->getMessage()]);
