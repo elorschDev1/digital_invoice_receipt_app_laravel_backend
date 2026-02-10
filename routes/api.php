@@ -27,6 +27,7 @@ use App\Http\Middleware\DashboardMiddleWare;
 use App\Http\Middleware\HomePageMiddleWare;
 use App\Http\Middleware\RetrievedInvoicesMiddleware;
 use App\Http\Controllers\RecentTransactionsController;
+use App\Http\Controllers\ExpenseAdditionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -85,3 +86,4 @@ Route::middleware([HomePageMiddleWare::class])->group(function(){
 });
 
 Route::post("/recentTransactions",[RecentTransactionsController::class,"getRecentTransactions"]);
+Route::post("/addExpense",[ExpenseAdditionController::class,"addExpense"]);
