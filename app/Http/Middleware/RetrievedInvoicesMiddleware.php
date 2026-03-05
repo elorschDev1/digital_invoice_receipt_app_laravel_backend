@@ -28,8 +28,8 @@ class RetrievedInvoicesMiddleware{
                     "message"=>"The expected value for this field is empty."
                 ]);
             }
-            $senderEmailExists=DB::table("created_invoices")
-                              ->where("senderEmail",$senderEmail)
+            $senderEmailExists=DB::table("registered_users")
+                              ->where("business_email",$senderEmail)
                               ->exists();
             if(!$senderEmailExists){
                 return response()->json([
