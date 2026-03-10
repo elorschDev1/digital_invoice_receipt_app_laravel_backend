@@ -28,6 +28,10 @@ use App\Http\Middleware\HomePageMiddleWare;
 use App\Http\Middleware\RetrievedInvoicesMiddleware;
 use App\Http\Controllers\RecentTransactionsController;
 use App\Http\Controllers\ExpenseAdditionController;
+use App\Http\Middleware\ExpenseAdditionMiddleware;
+use App\Http\Controllers\RetrieveExpensesController;
+use App\Http\Controllers\DeleteExpenseController;
+use App\Http\Controllers\RevenueExpensesComparisonController;
 
 /*
 |--------------------------------------------------------------------------
@@ -86,4 +90,7 @@ Route::middleware([HomePageMiddleWare::class])->group(function(){
 });
 
 Route::post("/recentTransactions",[RecentTransactionsController::class,"getRecentTransactions"]);
-Route::post("/addExpense",[ExpenseAdditionController::class,"addExpense"]);
+Route::post("/addExpense",[ExpenseAdditionController::class,"addExpense"])->middleware(ExpenseAdditionMiddleware::class);
+Route::post("/getUserExpenses",[RetrieveExpensesController::class,"retrieveUserExpenses"]);
+Route::post("/deleteUserExpenses",[DeleteExpenseController::class,"deleteUserExpenses"]);
+Route::post("/revenueExpensesComparison",[RevenueExpensesComparisonController::class,"getRevenueVsExpenses"]);
