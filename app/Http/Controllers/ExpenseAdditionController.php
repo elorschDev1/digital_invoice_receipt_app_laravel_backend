@@ -49,7 +49,41 @@ class ExpenseAdditionController extends Controller{
                     "receiptErrors"=>$receiptErrors
                 ]);
             }
-            else{
+            if($formValidator->passes()&&$request->has("id")===true){
+                    if($request->has("id")){
+                        $updateUserExpense=DB::table("expenses")
+                                            ->where("id",$request->input("id"))
+                                            ->where("user_email",$user_email)
+                                            ->update([
+                                                  "expense_date"=>$expense_date,
+                                                  "expense_description"=>$expense_description,
+                                                  "amount"=>(float)$amount,
+                                                  "category"=>$category,
+                                                  "receipt_url"=>$receipt,
+
+                                            ]);
+                         try{
+                            if($updateUserExpense){
+                                return response()->json([
+                                    "message"=>"Great, this expense has been updated."
+                                ]);
+                            }
+                         }catch(QueryException $e){
+                            return response()->json([
+                                "message"=>"Database error ".$e->getMessage()
+                            ]);
+                         }catch(\Exception $e){
+                            return response()->json([
+                                "Error Message"=>$e->getMessage()
+                            ]);
+                         }
+                                          
+
+                        
+
+                    }
+            }
+            if($formValidator->passes()&&$request->has("id")===false){
                 $saveUserExpense=DB::table("expenses")->insert([
                                 "user_email"=>$user_email,
                                 "company_name"=>$company_name,
@@ -66,6 +100,7 @@ class ExpenseAdditionController extends Controller{
                                         "message"=>"Your expense has been saved."
                                     ]);
                                 }
+                
             }
             }catch(QueryException $e){
                 return response()->json($e->getMessage());
