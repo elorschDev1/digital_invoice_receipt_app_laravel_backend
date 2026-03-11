@@ -40,21 +40,17 @@ class AddClientController extends Controller{
             }
             if($formValidator->passes()){
                 try{
-                    $checkExistingBusinessData=DB::select("SELECT * FROM registered_users_clients WHERE business_email=:business_email AND client_email=:client_email AND client_phone=:client_phone",[":business_email"=>$useremail,":client_email"=>$email,":client_phone"=>$phone]);
-                    if(count($checkExistingBusinessData)>0)return response()->json("Client exists.");
-                    else{
-                        $insertBusinessData=DB::insert("INSERT INTO registered_users_clients(business_email,client_name,client_email,client_phone,client_address)
-                        VALUES(:business_email,:client_name,:client_email,:client_phone,:client_address)",[
-                              ":business_email"=>$useremail,
-                              ":client_name"=>$businessname,
-                              ":client_email"=>$email,
-                              ":client_phone"=>$phone,
-                              ":client_address"=>$address
-                        ]);
-                    }
+                     $insertBusinessData=DB::table("registered_users_clients")->insert([
+                        "business_email"=>$useremail,
+                        "client_name"=>$businessname,
+                        "client_email"=>$email,
+                        "client_phone"=>$phone,
+                        "client_address"=>$address
+                     ]);
                     if($insertBusinessData)return response()->json("Saved successfully.");
                 }
                 catch(QueryException $e){
+                    if($e->getCode()==23000)return response()->json("Client exists.");
                     return response()->json($e->getMessage());
                 }
             }
