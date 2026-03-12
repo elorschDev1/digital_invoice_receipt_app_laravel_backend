@@ -13,6 +13,8 @@ return new class extends Migration
         $table->index("user_email");
         });
     }
+
+
     public function down(): void{
         Schema::table('expenses', function (Blueprint $table) {
             $table->dropIndex(["user_email"]);
