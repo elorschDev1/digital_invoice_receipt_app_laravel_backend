@@ -36,7 +36,7 @@ class RevenueExpensesComparisonController extends Controller{
             ];   
         }
         return response()->json([
-            "data"=>$data,
+            "comparisonData"=>$data,
             "success"=>true,
             "status"=>200
         ]);
